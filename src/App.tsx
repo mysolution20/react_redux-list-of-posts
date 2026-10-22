@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import 'bulma/css/bulma.css';
@@ -13,7 +13,7 @@ import { getUserPosts } from './api/posts';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { getUsers } from './api/users';
 import * as usersActions from './features/users';
-import * as authorActions from './features/author';
+import { User } from './types/User';
 import * as postsActions from './features/posts';
 import * as selectedPostActions from './features/selectedPost';
 import * as commentsActions from './features/comments';
@@ -25,7 +25,7 @@ export const App: React.FC = () => {
     loaded,
     hasError,
   } = useAppSelector(state => state.posts);
-  const author = useAppSelector(state => state.author);
+  const [author, setAuthor] = useState<User | null>(null);
   const selectedPost = useAppSelector(state => state.selectedPost);
 
   useEffect(() => {
@@ -79,10 +79,7 @@ export const App: React.FC = () => {
           <div className="tile is-parent">
             <div className="tile is-child box is-success">
               <div className="block">
-                <UserSelector
-                  value={author}
-                  onChange={user => dispatch(authorActions.set(user))}
-                />
+                <UserSelector value={author} onChange={setAuthor} />
               </div>
 
               <div className="block" data-cy="MainContent">
